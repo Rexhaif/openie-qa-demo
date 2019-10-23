@@ -49,8 +49,11 @@
         <v-row align="center" justify="center">
             <v-col sm="6" md="3" v-for="answer in items">
             <v-card>
-                <v-card-title>Answer</v-card-title>
-                <v-card-text>({{ answer.subject }})-[{{ answer.relation }}]->({{ answer.object }})</v-card-text>
+                <v-card-title v-if="answer.status === 'ok'">Answer</v-card-title>
+                <v-card-title v-else>Error</v-card-title>
+                <v-card-text>
+                  {{ answer.subject }} {{ answer.relation }} {{ answer.object }}
+                </v-card-text>
             </v-card>
             </v-col>
         </v-row>
@@ -72,7 +75,8 @@
         {
           "subject": "huawei",
           "relation": "developed",
-          "object": "google"
+          "object": "google",
+          "status": 'ok',
         }
       ],
     }),
@@ -89,13 +93,34 @@
           )
           .then(function (response) {
             let idx = 0;
-            for (let res of response.data) {
+            if(response.data.length === 0) {
+              while (vm.items.length !== 0) {
+                vm.items.pop();
+              }
+              vm.$set(vm.items, 0, {
+                'subject': "No",
+                'relation': "answers",
+                'object': 'found',
+                'status': 'not-found'
+              });
+            }
+            for(let res of response.data) {
+                res['status'] = 'ok'
                 vm.$set(vm.items, idx, res);
                 idx += 1;
             }
           })
           .catch(function (error) {
-            console.log(error)
+            console.log(error);
+            while (vm.items.length !== 0) {
+                vm.items.pop();
+            }
+            vm.$set(vm.items, 0, {
+              'subject': "An",
+              'relation': "error",
+              'object': 'occured',
+              'status': 'error'
+            });
           })
       }
     },
