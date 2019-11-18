@@ -49,7 +49,7 @@
         <v-row align="center" justify="center">
             <v-col sm="6" md="3" v-for="answer in items">
             <v-card>
-                <v-card-title v-if="answer.status === 'ok'">Answer</v-card-title>
+                <v-card-title v-if="answer.status === 'ok'">Answer - {{ answer.prob.toFixed(4) }}</v-card-title>
                 <v-card-title v-else>Error</v-card-title>
                 <v-card-text>
                   {{ answer.subject }} {{ answer.relation }} {{ answer.object }}
@@ -76,6 +76,7 @@
           "subject": "huawei",
           "relation": "developed",
           "object": "google",
+          "prob": 0.01231231,
           "status": 'ok',
         }
       ],
