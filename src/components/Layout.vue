@@ -47,15 +47,30 @@
             fluid
         >
         <v-row align="center" justify="center">
-            <v-col sm="6" md="3" v-for="answer in items">
-            <v-card>
-                <v-card-title v-if="answer.status === 'ok'">Answer - {{ answer.prob.toFixed(4) }}</v-card-title>
-                <v-card-title v-else>Error</v-card-title>
-                <v-card-text>
-                  {{ answer.subject }} {{ answer.relation }} {{ answer.object }}
-                </v-card-text>
+            <v-card
+              class="mx-auto"
+              max-width="300"
+              tile
+            >
+              <v-list shaped>
+                <v-subheader>Answers</v-subheader>
+                <v-list-item-group v-model="item" color="primary">
+                  <v-list-item
+                    v-for="(item, i) in items"
+                    :key="i"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item.subject }} {{ item.relation }} {{ item.object }}</v-list-item-title>
+                      <v-list-item-subtitle v-text="item.prob.toFixed(4)"></v-list-item-subtitle>
+                      <v-divider
+                        :key="i"
+                      ></v-divider>
+                    </v-list-item-content>
+                  </v-list-item>
+                  
+                </v-list-item-group>
+              </v-list>
             </v-card>
-            </v-col>
         </v-row>
       </v-container>
     </v-content>
@@ -84,7 +99,7 @@
     methods: {
       fetch_data: function() {
 
-        const vm = this
+        const vm = this;
         console.log(this.input_text);
         axios
           .post(
